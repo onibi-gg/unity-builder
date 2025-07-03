@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { ExecOptions, exec } from '@actions/exec';
 import { DockerParameters, StringKeyValuePair } from './shared-types';
+import { execSync } from 'node:child_process';
 
 class Docker {
   static async run(
@@ -102,6 +103,7 @@ class Docker {
 
     const githubHome = path.join(runnerTempPath, '_github_home');
     if (!existsSync(githubHome)) mkdirSync(githubHome);
+    execSync(`icacls "${githubHome}" /grant Everyone:M`);
 
     return `docker run \
             --workdir c:${dockerWorkspacePath} \

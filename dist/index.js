@@ -6048,6 +6048,7 @@ const image_environment_factory_1 = __importDefault(__nccwpck_require__(25145));
 const node_fs_1 = __nccwpck_require__(87561);
 const node_path_1 = __importDefault(__nccwpck_require__(49411));
 const exec_1 = __nccwpck_require__(71514);
+const node_child_process_1 = __nccwpck_require__(17718);
 class Docker {
     static async run(image, parameters, silent = false, overrideCommands = '', additionalVariables = [], options = {}, entrypointBash = false) {
         let runCommand = '';
@@ -6107,6 +6108,7 @@ class Docker {
         const githubHome = node_path_1.default.join(runnerTempPath, '_github_home');
         if (!(0, node_fs_1.existsSync)(githubHome))
             (0, node_fs_1.mkdirSync)(githubHome);
+        (0, node_child_process_1.execSync)(`icacls "${githubHome}" /grant Everyone:M`);
         return `docker run \
             --workdir c:${dockerWorkspacePath} \
             --rm \
@@ -362035,6 +362037,14 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 17718:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:child_process");
 
 /***/ }),
 
