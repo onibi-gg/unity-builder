@@ -105,7 +105,7 @@ class Docker {
             ${ImageEnvironmentFactory.getEnvVarString(parameters)} \
             --env GITHUB_WORKSPACE=c:${dockerWorkspacePath} \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
-            --env BEE_CACHE_DIRECTORY=c:/BlankProject/Library/bee_cache \
+            --env BEE_CACHE_DIRECTORY=c:${dockerWorkspacePath}/Library/bee_cache \
             --volume "${workspace}":"c:${dockerWorkspacePath}" \
             --volume "c:/regkeys":"c:/regkeys" \
             --volume "C:/Program Files/Microsoft Visual Studio":"C:/Program Files/Microsoft Visual Studio" \
