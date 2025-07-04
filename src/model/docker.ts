@@ -3,7 +3,6 @@ import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { ExecOptions, exec } from '@actions/exec';
 import { DockerParameters, StringKeyValuePair } from './shared-types';
-import { execSync } from 'node:child_process';
 
 class Docker {
   static async run(
@@ -93,7 +92,6 @@ class Docker {
     const {
       workspace,
       actionFolder,
-      runnerTempPath,
       gitPrivateToken,
       dockerWorkspacePath,
       dockerCpuLimit,
@@ -101,19 +99,14 @@ class Docker {
       dockerIsolationMode,
     } = parameters;
 
-    const githubHome = path.join(runnerTempPath, '_github_home');
-    if (!existsSync(githubHome)) mkdirSync(githubHome);
-    execSync(`icacls "${githubHome}" /grant Everyone:M`);
-
     return `docker run \
             --workdir c:${dockerWorkspacePath} \
             --rm \
             ${ImageEnvironmentFactory.getEnvVarString(parameters)} \
             --env GITHUB_WORKSPACE=c:${dockerWorkspacePath} \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
-            --env BEE_CACHE_DIRECTORY=C:/githubhome/bee_cache \
+            --env BEE_CACHE_DIRECTORY=c:/BlankProject/bee_cache \
             --volume "${workspace}":"c:${dockerWorkspacePath}" \
-            --volume "${githubHome}":"C:/githubhome" \
             --volume "c:/regkeys":"c:/regkeys" \
             --volume "C:/Program Files/Microsoft Visual Studio":"C:/Program Files/Microsoft Visual Studio" \
             --volume "C:/Program Files (x86)/Microsoft Visual Studio":"C:/Program Files (x86)/Microsoft Visual Studio" \

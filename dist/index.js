@@ -6048,7 +6048,6 @@ const image_environment_factory_1 = __importDefault(__nccwpck_require__(25145));
 const node_fs_1 = __nccwpck_require__(87561);
 const node_path_1 = __importDefault(__nccwpck_require__(49411));
 const exec_1 = __nccwpck_require__(71514);
-const node_child_process_1 = __nccwpck_require__(17718);
 class Docker {
     static async run(image, parameters, silent = false, overrideCommands = '', additionalVariables = [], options = {}, entrypointBash = false) {
         let runCommand = '';
@@ -6104,20 +6103,15 @@ class Docker {
             "${overrideCommands !== '' ? overrideCommands : `/entrypoint.sh`}"`;
     }
     static getWindowsCommand(image, parameters) {
-        const { workspace, actionFolder, runnerTempPath, gitPrivateToken, dockerWorkspacePath, dockerCpuLimit, dockerMemoryLimit, dockerIsolationMode, } = parameters;
-        const githubHome = node_path_1.default.join(runnerTempPath, '_github_home');
-        if (!(0, node_fs_1.existsSync)(githubHome))
-            (0, node_fs_1.mkdirSync)(githubHome);
-        (0, node_child_process_1.execSync)(`icacls "${githubHome}" /grant Everyone:M`);
+        const { workspace, actionFolder, gitPrivateToken, dockerWorkspacePath, dockerCpuLimit, dockerMemoryLimit, dockerIsolationMode, } = parameters;
         return `docker run \
             --workdir c:${dockerWorkspacePath} \
             --rm \
             ${image_environment_factory_1.default.getEnvVarString(parameters)} \
             --env GITHUB_WORKSPACE=c:${dockerWorkspacePath} \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
-            --env BEE_CACHE_DIRECTORY=C:/githubhome/bee_cache \
+            --env BEE_CACHE_DIRECTORY=c:/BlankProject/bee_cache \
             --volume "${workspace}":"c:${dockerWorkspacePath}" \
-            --volume "${githubHome}":"C:/githubhome" \
             --volume "c:/regkeys":"c:/regkeys" \
             --volume "C:/Program Files/Microsoft Visual Studio":"C:/Program Files/Microsoft Visual Studio" \
             --volume "C:/Program Files (x86)/Microsoft Visual Studio":"C:/Program Files (x86)/Microsoft Visual Studio" \
@@ -362037,14 +362031,6 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
-
-/***/ }),
-
-/***/ 17718:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:child_process");
 
 /***/ }),
 
